@@ -1,40 +1,28 @@
 #include "quickSort.h"
 
-vector<int> quickSort(vector<int> A, int p, int r)
+vector<int>  quickSort(vector<int> A, int p, int r)
 {
     int q = -1;
     if(p < r)
     {
         q = partition(A, p, r);
-        quickSort(A, p, q-1);
-        quickSort(A, q+1, r);
+        A = quickSort(A, p, q-1);
+        A = quickSort(A, q+1, r);
     }
 
     return A;
+
 }
 
-
-int partition(vector<int> &A, int p, int r)
-{
-    int x = A.at(r);
-    int temp = 0;
+int partition(vector<int>& A, int p, int r) {
+    int x = A[r];
     int i = p - 1;
-
-    for(int j = p; j < r - 1; j++)
-    {
-        if( A.at(j) <= x)
-        {
-           i = i + 1;
-           temp = A.at(i);
-           A.at(i) = A.at(j);
-           A.at(j) = temp;
+    for (int j = p; j < r; j++) {
+        if (A[j] <= x) {
+            i = i + 1;
+            swap(A[i], A[j]);
         }
     }
-
-    temp = A.at(i+1);
-    A.at(i+1) = A.at(r);
-    A.at(r) = temp;
-
+    swap(A[i + 1], A[r]);
     return i + 1;
-
 }

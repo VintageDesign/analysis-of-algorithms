@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include <iomanip>
 #include <time.h>
@@ -6,6 +5,7 @@
 #include <chrono>
 #include <algorithm>
 #include <string>
+#include <cstdlib>
 
 #include "quickSort.h"
 using namespace std;
@@ -35,15 +35,21 @@ Template function for running correctness tests
 GRADING: CORRECTNESS TESTS
 ******************************************************/
 void correctness() {
+    vector<int> quickSortResult;
     vector<int> test1 = { 2,1 };
     vector<int> test2 = { 1, 3, 2 };
     vector<int> test3 = { 2, 2, 1, 3, 5, 4, 8, 0 };
-    vector<int> test4; //TODO fill in with 9 random values
+    vector<int> test4;
+
+    for(int i = 0; i < 9; i++)
+    {
+        test4.push_back(rand() % 100);
+    }
 
     cout << "Test 1: Basic sort with 2 elements" << endl;
     cout << "Original: 2, 1" << endl;
     cout << "Quick Result: ";
-    vector<int> quickSortResult = quickSort(test1, 0, 1);
+    quickSortResult = quickSort(test1, 0, 1);
     printVector(quickSortResult);
     checkSort(quickSortResult, test1);
     cout << "Heap Result: ";
@@ -75,6 +81,9 @@ void correctness() {
     cout << "Original: "  << endl; //TODO print 9 random values
     cout << "Quick Result: ";
     //TODO test, and display result...TIP you can write a generic test if you check A[i+1] > A[i]
+    quickSortResult = quickSort(test4, 0, 8);
+    printVector(quickSortResult);
+    checkSort(quickSortResult, test4);
     cout << "Heap Result: ";
 
 }
