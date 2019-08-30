@@ -11,6 +11,11 @@
 #include "heapsort.h"
 using namespace std;
 
+
+
+
+void timeTest(void);
+
 void printVector(vector<int> sortResult)
 {
 
@@ -36,6 +41,17 @@ void checkSort(vector<int> sortedResult, vector<int> original)
     cout << passFlag << endl;
 }
 
+vector<int> generateVector(int length)
+{
+    vector<int> list;
+    for(int i = 0; i < length; i++)
+    {
+        list.push_back(rand() % 1000);
+    }
+
+    return list;
+}
+
 /******************************************************
 Template function for running correctness tests
 GRADING: CORRECTNESS TESTS
@@ -46,12 +62,8 @@ void correctness() {
     vector<int> test1 = { 2,1 };
     vector<int> test2 = { 1, 3, 2 };
     vector<int> test3 = { 2, 2, 1, 3, 5, 4, 8, 0 };
-    vector<int> test4;
+    vector<int> test4 = generateVector(9);
     //  test 4 with 9 random numbers
-    for(int i = 0; i < 9; i++)
-    {
-        test4.push_back(rand() % 100);
-    }
 
 
     HeapSort heap = HeapSort();
@@ -128,7 +140,7 @@ int main() {
         if (toupper(choice) == 'T') {
            correctness();
         } else if (toupper(choice) == 'E') {
-            //TODO run time test
+            timeTest();
         } else if (toupper(choice) == 'U') {
             cout << "Input ( # # # ... -999): ";
             //TODO get user input, sort it, and display the results
@@ -136,5 +148,44 @@ int main() {
     }
 
     return 1;
+
+}
+
+
+
+void timeTest(void)
+{
+    vector<int> testSizes = { 50, 100, 200, 500, 1000, 2000, 10000, 50000, 100000, 200000};
+    vector<int> unsortedList;
+    vector<int> quickSortResult;
+    vector<int> heapSortResult;
+    clock_t     startTime;
+    clock_t     endTime;
+    double      time;
+
+    for(int size : testSizes)
+    {
+        unsortedList = generateVector(size);
+
+        HeapSort heap = HeapSort();
+
+        cout << "Test Size: " << size << endl;
+        cout << "Quick Result: ";
+        startTime = clock();
+        quickSortResult = quickSort(unsortedList, 0, size-1);
+        endTime = clock();
+        time = (double) (endTime - startTime) / CLOCKS_PER_SEC;
+        cout << time << endl;
+        checkSort(quickSortResult, unsortedList);
+        cout << "Heap Result: ";
+        startTime = clock();
+        heapSortResult = heap.heapSort(unsortedList);
+        endTime = clock();
+        time = (double) (endTime - startTime) / CLOCKS_PER_SEC;
+        cout << time << endl;
+        checkSort(heapSortResult, unsortedList);
+    }
+
+
 
 }
