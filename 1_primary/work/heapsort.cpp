@@ -6,28 +6,73 @@ HeapSort::HeapSort()
 
 }
 
-HeapSort::heapSort(vector<int> A)
+vector<int> HeapSort::heapSort(vector<int> A)
 {
-   this.buildMaxHeap(A);
+   buildMaxHeap(A);
 
-   for(int i = A.length(); i > 2; i--)
+   for(int i = A.size() - 1; i >= 1; i--)
    {
-      swap(A.at(1), A.at(i));
-      this.heapSize = this.heapSize - 1;
-      this.maxHeapify(A, 1);
+      swap(A.at(0), A.at(i));
+      heapSize = heapSize - 1;
+      maxHeapify(A, 0);
+   }
+
+   return  A;
+}
+
+void HeapSort::buildMaxHeap(vector<int> &A)
+{
+   heapSize = A.size();
+   for (int i = floor(A.size()/2); i >= 0; i--)
+   {
+      maxHeapify(A, i);
    }
 
 }
 
-HeapSort::buildMaxHeap(vector<int>  A)
+
+void HeapSort::maxHeapify(vector<int> &A, int i)
 {
-   this.heapSize = A.length();
-   for (int i = floor(A.length()/2); i >= 1; i--)
+   int l = left(i);
+   int r = right(i);
+   int largest = 0;
+
+   if (l < heapSize && A[l] > A[i])
    {
-      this.maxHeapify(A, i);
+       largest = l;
+   }
+   else
+   {
+      largest = i;
    }
 
+   if (r < heapSize && A[r] > A[i])
+   {
+       largest = r;
+   }
+   else
+   {
+      largest = i;
+   }
+   if (largest != i )
+    {
+       swap(A.at(i), A.at(largest));
+        maxHeapify(A, largest);
+    }
 }
 
 
-HeapSort::maxHeapify(vector<int> A, int
+int HeapSort::parent(int i)
+{
+   return floor(i/2);
+
+}
+int HeapSort::left(int i)
+{
+    return  2 * i;
+}
+
+int HeapSort::right(int i)
+{
+    return  2 * i + 1;
+}

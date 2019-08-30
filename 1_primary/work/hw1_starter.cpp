@@ -8,6 +8,7 @@
 #include <cstdlib>
 
 #include "quickSort.h"
+#include "heapsort.h"
 using namespace std;
 
 void printVector(vector<int> sortResult)
@@ -36,15 +37,19 @@ GRADING: CORRECTNESS TESTS
 ******************************************************/
 void correctness() {
     vector<int> quickSortResult;
+    vector<int> heapSortResult;
     vector<int> test1 = { 2,1 };
     vector<int> test2 = { 1, 3, 2 };
     vector<int> test3 = { 2, 2, 1, 3, 5, 4, 8, 0 };
     vector<int> test4;
-
+    //  test 4 with 9 random numbers
     for(int i = 0; i < 9; i++)
     {
         test4.push_back(rand() % 100);
     }
+
+
+    HeapSort heap = HeapSort();
 
     cout << "Test 1: Basic sort with 2 elements" << endl;
     cout << "Original: 2, 1" << endl;
@@ -54,6 +59,9 @@ void correctness() {
     checkSort(quickSortResult, test1);
     cout << "Heap Result: ";
     //TODO test, and display result
+    heapSortResult = heap.heapSort(test1);
+    printVector(heapSortResult);
+    checkSort(heapSortResult, test1);
 
     cout << endl;
 
@@ -64,6 +72,9 @@ void correctness() {
     printVector(quickSortResult);
     checkSort(quickSortResult, test2);
     cout << "Heap Result: ";
+    heapSortResult = heap.heapSort(test2);
+    printVector(heapSortResult);
+    checkSort(heapSortResult, test2);
 
     cout << endl;
 
@@ -74,6 +85,9 @@ void correctness() {
     printVector(quickSortResult);
     checkSort(quickSortResult, test3);
     cout << "Heap Result: ";
+    heapSortResult = heap.heapSort(test3);
+    printVector(heapSortResult);
+    checkSort(heapSortResult, test3);
 
     cout << endl;
 
@@ -85,6 +99,9 @@ void correctness() {
     printVector(quickSortResult);
     checkSort(quickSortResult, test4);
     cout << "Heap Result: ";
+    heapSortResult = heap.heapSort(test4);
+    printVector(heapSortResult);
+    checkSort(heapSortResult, test4);
 
 }
 

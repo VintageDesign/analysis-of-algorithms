@@ -1,15 +1,27 @@
 #include <iostream>
 #include <vector>
+#include <math.h>
+
+using namespace std;
 
 
 class HeapSort {
+   public:
    HeapSort();
 
-   maxHeapify(vector<int> &A, int i);
+   int heapSize;
 
-   buildMaxHeap(vector<int> &A);
+   void maxHeapify(vector<int> &A, int i);
 
-   heapSort(vector<int> &A);
+   void buildMaxHeap(vector<int> &A);
+
+   vector<int> heapSort(vector<int> A);
+
+   int parent(int i);
+
+   int left(int i);
+
+   int right(int i);
 
 
-}
+};
