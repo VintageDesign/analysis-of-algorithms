@@ -74,12 +74,10 @@ void correctness() {
     quickSortResult = test1;
     quickSort(quickSortResult, 0, 1);
     printVector(quickSortResult);
-    checkSort(quickSortResult, test1);
     cout << "Heap Result: ";
     //TODO test, and display result
     heapSortResult = heap.heapSort(test1);
     printVector(heapSortResult);
-    checkSort(heapSortResult, test1);
 
     cout << endl;
 
@@ -101,7 +99,7 @@ void correctness() {
     cout << "Original: 2, 2, 1, 3, 5, 4, 8, 0 " << endl;
     cout << "Quick Result: ";
     quickSortResult = test3;
-    quickSort(quicksortresult, 0, 7);
+    quickSort(quickSortResult, 0, 7);
     printVector(quickSortResult);
     checkSort(quickSortResult, test3);
     cout << "Heap Result: ";
@@ -159,7 +157,8 @@ int main() {
 
 void timeTest(void)
 {
-    vector<int> testSizes = { 50, 100, 200, 500, 1000, 2000, 10000, 50000, 100000, 200000};
+    vector<int> testSizes = { 50, 100, 200, 500, 1000, 2000, 10000, 50000, 100000, 200000, 500000
+                            , 1000000 };
     vector<int> unsortedList;
     vector<int> sortedList;
     vector<int> quickSortResult;
