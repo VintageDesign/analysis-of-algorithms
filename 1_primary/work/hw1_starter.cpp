@@ -14,9 +14,14 @@ using namespace std;
 void printVector(vector<int> sortResult)
 {
 
-    for (int val : sortResult)
+    for (int i = 0; i < sortResult.size(); i++)
     {
-       cout << val << ", ";
+       cout << sortResult.at(i);
+
+       if( i < sortResult.size() - 1)
+       {
+           cout << ", ";
+       }
     }
     cout << endl;
     return;

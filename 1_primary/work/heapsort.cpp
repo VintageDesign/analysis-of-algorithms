@@ -46,13 +46,9 @@ void HeapSort::maxHeapify(vector<int> &A, int i)
       largest = i;
    }
 
-   if (r < heapSize && A[r] > A[i])
+   if (r < heapSize && A[r] > A[largest])
    {
        largest = r;
-   }
-   else
-   {
-      largest = i;
    }
    if (largest != i )
     {
