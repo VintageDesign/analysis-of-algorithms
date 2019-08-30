@@ -71,7 +71,8 @@ void correctness() {
     cout << "Test 1: Basic sort with 2 elements" << endl;
     cout << "Original: 2, 1" << endl;
     cout << "Quick Result: ";
-    quickSortResult = quickSort(test1, 0, 1);
+    quickSortResult = test1;
+    quickSort(quickSortResult, 0, 1);
     printVector(quickSortResult);
     checkSort(quickSortResult, test1);
     cout << "Heap Result: ";
@@ -85,7 +86,8 @@ void correctness() {
     cout << "Test 2: Basic sort with 3 elements" << endl;
     cout << "Original: 1, 3, 2" << endl;
     cout << "Quick Result: ";
-    quickSortResult = quickSort(test2, 0, 2);
+    quickSortResult = test2;
+    quickSort(quickSortResult, 0, 2);
     printVector(quickSortResult);
     checkSort(quickSortResult, test2);
     cout << "Heap Result: ";
@@ -98,7 +100,8 @@ void correctness() {
     cout << "Test 3: Basic sort with even # of elements" << endl;
     cout << "Original: 2, 2, 1, 3, 5, 4, 8, 0 " << endl;
     cout << "Quick Result: ";
-    quickSortResult = quickSort(test3, 0, 7);
+    quickSortResult = test3;
+    quickSort(quicksortresult, 0, 7);
     printVector(quickSortResult);
     checkSort(quickSortResult, test3);
     cout << "Heap Result: ";
@@ -112,7 +115,8 @@ void correctness() {
     cout << "Original: "  << endl; //TODO print 9 random values
     cout << "Quick Result: ";
     //TODO test, and display result...TIP you can write a generic test if you check A[i+1] > A[i]
-    quickSortResult = quickSort(test4, 0, 8);
+    quickSortResult = test4;
+    quickSort(quickSortResult, 0, 8);
     printVector(quickSortResult);
     checkSort(quickSortResult, test4);
     cout << "Heap Result: ";
@@ -157,6 +161,7 @@ void timeTest(void)
 {
     vector<int> testSizes = { 50, 100, 200, 500, 1000, 2000, 10000, 50000, 100000, 200000};
     vector<int> unsortedList;
+    vector<int> sortedList;
     vector<int> quickSortResult;
     vector<int> heapSortResult;
     clock_t     startTime;
@@ -166,17 +171,18 @@ void timeTest(void)
     for(int size : testSizes)
     {
         unsortedList = generateVector(size);
+        sortedList = unsortedList;
 
         HeapSort heap = HeapSort();
 
         cout << "Test Size: " << size << endl;
         cout << "Quick Result: ";
         startTime = clock();
-        quickSortResult = quickSort(unsortedList, 0, size-1);
+        quickSort(sortedList, 0, size-1);
         endTime = clock();
         time = (double) (endTime - startTime) / CLOCKS_PER_SEC;
         cout << time << endl;
-        checkSort(quickSortResult, unsortedList);
+        checkSort(sortedList, unsortedList);
         cout << "Heap Result: ";
         startTime = clock();
         heapSortResult = heap.heapSort(unsortedList);

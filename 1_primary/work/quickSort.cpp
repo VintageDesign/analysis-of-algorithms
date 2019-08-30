@@ -1,16 +1,15 @@
 #include "quickSort.h"
 
-vector<int>  quickSort(vector<int> A, int p, int r)
+void  quickSort(vector<int> &A, int p, int r)
 {
     int q = -1;
     if(p < r)
     {
         q = partition(A, p, r);
-        A = quickSort(A, p, q-1);
-        A = quickSort(A, q+1, r);
+        quickSort(A, p, q-1);
+        quickSort(A, q+1, r);
     }
 
-    return A;
 
 }
 
