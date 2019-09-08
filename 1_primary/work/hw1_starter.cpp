@@ -52,6 +52,31 @@ vector<int> generateVector(int length)
     return list;
 }
 
+
+void manualSort(vector<int> input)
+{
+    HeapSort heap = HeapSort();
+    vector<int> quickSortResult;
+    vector<int> heapSortResult;
+
+    cout << "Manual Sort" << endl;
+    cout << "Original: ";
+    printVector(input);
+    cout << "Quick Result: ";
+    quickSortResult = input;
+    quickSort(quickSortResult, 0, input.size());
+    printVector(quickSortResult);
+    cout << "Heap Result: ";
+    //TODO test, and display result
+    heapSortResult = heap.heapSort(input);
+    printVector(heapSortResult);
+
+    cout << endl;
+
+}
+
+
+
 /******************************************************
 Template function for running correctness tests
 GRADING: CORRECTNESS TESTS
@@ -127,8 +152,10 @@ void correctness() {
 
 
 int main() {
+    int value;
     char choice = 'c';
     vector<int> input;
+
 
     while (toupper(choice) != 'Q') {
         cout << "\nEnter T to run correctness tests\n"
@@ -145,7 +172,17 @@ int main() {
             timeTest();
         } else if (toupper(choice) == 'U') {
             cout << "Input ( # # # ... -999): ";
-            //TODO get user input, sort it, and display the results
+            input.clear();
+            cin >> value;
+            while( value != -999)
+            {
+               input.push_back(value);
+               cin >> value;
+
+            }
+
+            manualSort(input);
+
         }
     }
 
