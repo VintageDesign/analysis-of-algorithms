@@ -1,0 +1,25 @@
+DFS(start, currWeight, path)
+    set visited[start] to true //mark current node visited
+    add weight[start] to currWeight //add current nodes weight to total
+    add start to back of path //add current node to path
+
+    //check to see if we currently have a solution
+    // Valid Weight, Valid K value, and Score improvement
+    if (weight[start] > 0 and path.size -1 < nodeTotal and results[start] > currWeight)
+        results[start].weight = currWeight  //if we do save the weight
+        results[start].path = path          //and the path
+        for i = (path.size - 1) to nodeTotal //then also mark the next k levels with answer too
+            if (currWeight < results[i])  //but only if it's better then what we have
+                results[i].weight = currWeight
+                results[i].path = path
+    //Tryand move through children
+    for i = 0 to nodeTotal
+        if (weight[i] > 0 and visited[i] = false) //Only visit a child if it has a weight and isn't visited
+            if (weight[i] + currWeight < results[nextLevel]) //Only visit a child if it's total is an improvement
+                path = DFS(i, currWeight, path) //Recurse
+                visited[i] = false //Now that we're back unvisit
+                path.pop_back      // Pretend we never saw it
+                currWeight -= weight[i] // Pretend we never included it at all
+
+    return path //
+Return
