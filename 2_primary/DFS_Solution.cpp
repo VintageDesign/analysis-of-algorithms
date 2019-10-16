@@ -5,7 +5,16 @@
 #include <iostream>
 #include <fstream>
 #include <float.h>
+#include <algorithm>
 using namespace std;
+
+
+struct Edge
+{
+   int to;
+   int from;
+   double cost;
+};
 
 class GraphSolver{
 
@@ -13,88 +22,84 @@ class GraphSolver{
       int nodeTotal;
       int k;
       int end;
-      vector<bool> visited;
+      int start;
+      double **path;
+      vector<struct Edge> edges;
       vector<vector<int>> finalPath;
-      double **graph;
-      double **results;
 
-      GraphSolver(int sizeIn, double** graphIn, int maxK, int endIn)
+
+      GraphSolver(int sizeIn, vector<struct Edge> edgeIn, int maxK,int startIn, int endIn)
       {
-         graph = new double*[sizeIn];
-         results = new double*[sizeIn];
-         visited = vector<bool>(sizeIn, false);
-         finalPath = vector<vector<int>>(maxK, vector<int>(sizeIn));
+         path = new double*[maxK+1];
 
-         for( int i = 0; i < sizeIn; i++)
+         for( int i = 0; i < maxK+1; i++)
          {
-            graph[i] = new double[sizeIn];
-            results[i] = new double[maxK];
-            for (int j = 0; j < maxK; j++)
+            path[i] = new double[sizeIn];
+            for (int j = 0; j < sizeIn; j++)
             {
-               results[i][j] = DBL_MAX;
+               path[i][j] = DBL_MAX;
             }
          }
 
 
-         graph = graphIn;
+         edges = edgeIn;
          nodeTotal = sizeIn;
          k = maxK;
          end = endIn;
+         start = startIn;
+
+         finalPath = vector<vector<int>> (edgeIn.size(), vector<int>(0));
 
       }
 
-
-      vector<int> DFS(int vertex, double currentWeight,vector<int> currentPath)
+      double** Solve()
       {
-            visited[vertex] = true;
-            currentPath.push_back(vertex);
-            if (currentPath.size()-2 >= 0)
-               currentWeight += graph[vertex][currentPath.at(currentPath.size()-2)];
+         path[0][start] = 0;
+         int s = 0;
+         int t = 0;
 
-            if (graph[vertex][currentPath[currentPath.size()-2]] > 0
-                  && currentPath.size() - 2 < k
-                  && results[vertex][currentPath.size()-2] > currentWeight)
+         for (int i = 0; i < finalPath.size(); i++)
+         {
+            finalPath[i].push_back(start);
+         }
+
+         for(int kIndex = 1; kIndex < k+1; kIndex++)
+         {
+            for(int i = 0; i < edges.size(); i++)
             {
-               results[vertex][currentPath.size()-2] = currentWeight;
-               finalPath[currentPath.size()-2].clear();
-               finalPath[currentPath.size()-2] = currentPath;
-               for (int i = currentPath.size()-2; i < k; i++)
+               s = edges[i].from;
+               t = edges[i].to;
+               if( path[kIndex][t] > min(path[kIndex-1][t],path[kIndex-1][s] + edges[i].cost))
                {
-                  if(results[vertex][i] > currentWeight)
-                  {
-                     results[vertex][i] = currentWeight;
-                     finalPath[i].clear();
-                     finalPath[i] = currentPath;
-                  }
-               }
-            }
+                  path[kIndex][t] = min( path[kIndex][t], min(path[kIndex-1][t],path[kIndex-1][s] + edges[i].cost));
+                  finalPath[i].pop_back();
+                  finalPath[i].push_back(t);
 
-            for(int i = 0; i < nodeTotal; i++)
-            {
-               if(vertex != end) {
-                  if ( graph[vertex][i] > 0 && !visited[i])
-                  {
-                     if( graph[vertex][i] + currentWeight < results[i][currentPath.size() - 1])
-                     {
-                        currentPath = DFS(i, currentWeight, currentPath);
-                        currentPath.pop_back();
-                        visited[i] = false;
-                     }
-                  }
+               }
+               t = edges[i].from;
+               s = edges[i].to;
+               if( path[kIndex][t] > min(path[kIndex-1][t],path[kIndex-1][s] + edges[i].cost))
+               {
+                  path[kIndex][t] = min( path[kIndex][t], min(path[kIndex-1][t],path[kIndex-1][s] + edges[i].cost));
+                  finalPath[i].pop_back();
+                  finalPath[i].push_back(t);
                }
             }
-            return currentPath;
+         }
+
+         return path;
 
       }
 };
 
-
-// Written by Ayden
-double **read_file(string file_name, int& size){
+vector<struct Edge> read_file(string file_name, int& size){
    ifstream inFile;
+   vector<Edge> graphEdges;
+   Edge temp;
    double t;
    int counter = 0;
    inFile.open(file_name);
+// Written by Ayden
    if (!inFile) {
       cout << "Unable to open file";
       exit(1); // terminate with error
@@ -108,36 +113,64 @@ double **read_file(string file_name, int& size){
       counter +=1;
    }
    inFile.close();
-   return graph;
+// End of Ayden Code
+   for(int i = 0; i < size; i++)
+   {
+      for(int j = i + 1; j < size; j++)
+      {
+         if(graph[i][j] > 0)
+         {
+            temp.from = i;
+            temp.to = j;
+            temp.cost = graph[i][j];
+            graphEdges.push_back(temp);
+         }
+      }
+   }
+
+   return graphEdges;
 }
 
 
 int main(int argc, char* argv[])
 {
    // input comes in like `inputGraph start end k`
-   double ** graph;
+   vector<struct Edge> graph;
    int start = atoi(argv[2]) - 1; // All graphs inside the Solver are 0 indexed
    int end = atoi(argv[3]) - 1;
    int k = atoi(argv[4]);
    int size;
-   vector<int> path;
+   double ** final;
 
    graph = read_file(argv[1], size);
 
-   GraphSolver test(size, graph, k, end);
-
-
-   test.DFS(start, 0.0, path);
-
-   cout << test.results[end][k-1] << endl;
-
-   cout << "Final Path: " << endl;
-   for(int j = 0; j < k+1; j++)
+   /*
+   for(auto e: graph)
    {
-      cout << test.finalPath[k-1][j]+1 << " ";
+      cout << "V<f,t>: " << e.to << " " << e.from
+         << " Cost: " << e.cost << endl;
+   }
+   */
 
+
+   GraphSolver test(size, graph, k, start, end);
+   final = test.Solve();
+
+   cout << "Cost: " << final[k][end] << endl;
+
+   for (int j = 0; j <= k; j++)
+   {
+      for(int i = 0; i < test.finalPath[j].size(); i++)
+      {
+         cout << test.finalPath[j][i] +1 << " ";
+      }
    }
    cout << endl;
+
+
+
+
+
 
 }
 
