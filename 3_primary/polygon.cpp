@@ -34,6 +34,20 @@ double direction(pair<double, double> pi,
     right.second = pj.second - pi.second;
 
     retval = (left.first * right.second) - (right.first * left.second);
+
+    if(retval < 0)
+    {
+        retval = -1;
+    }
+    else if (retval > 0)
+    {
+        retval = 1;
+    }
+    else
+    {
+        retval = 0;
+    }
+
     return retval;
 }
 
@@ -83,6 +97,7 @@ int main(void)
     pair<double, double> tempPoint;
     int polyCount = 1;
     bool hasCross = false;
+    vector<double> angles;
 
     polygonFile >> polygonSize;
     do
@@ -102,16 +117,45 @@ int main(void)
             pair<double,double> p4 = points.at((i+3)%points.size());
 
             hasCross |= segementsIntersect(points.at(i), p2, p3, p4);
+            angles.push_back(direction(points.at(i), p2, p3));
 
         }
 
         if(hasCross)
         {
-            cout << "Not Simple" << endl;
+            cout << "  Not simple" << endl;
         }
         else
         {
-            cout << "Simple" << endl;
+            cout << "  Simple" << endl;
+           int leftCount = 0;
+           int rightCount = 0;
+
+            for(int i = 0; i < angles.size(); i++)
+            {
+               if(angles.at(i) < 0)
+                   leftCount++;
+               if(angles.at(i) > 0)
+                   rightCount++;
+            }
+
+            if(leftCount == 0 || rightCount == 0)
+            {
+                cout << "  Convex" << endl;
+            }
+            else
+            {
+                cout << "  Not convex" << endl;
+            }
+
+            if(leftCount < rightCount)
+            {
+                cout << "  Clockwise" << endl;
+            }
+            else
+            {
+                cout << "  Counterclockwise" << endl;
+            }
         }
 
 
@@ -120,6 +164,7 @@ int main(void)
 
 
         points.clear();
+        angles.clear();
         hasCross = false;
         polygonFile >> polygonSize;
         polyCount++;
