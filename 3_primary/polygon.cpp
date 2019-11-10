@@ -116,7 +116,10 @@ int main(void)
             pair<double,double> p3 = points.at((i+2)%points.size());
             pair<double,double> p4 = points.at((i+3)%points.size());
 
-            hasCross |= segementsIntersect(points.at(i), p2, p3, p4);
+            if(polygonSize != 3)
+            {
+                hasCross |= segementsIntersect(points.at(i), p2, p3, p4);
+            }
             angles.push_back(direction(points.at(i), p2, p3));
 
         }
