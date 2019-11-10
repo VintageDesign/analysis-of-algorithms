@@ -3,12 +3,13 @@
 #include <vector>
 #include <utility>
 
-bool onSegment(std::pair<double, double> pi,
-        std::pair<double, double> pj,
-        std::pair<double, double> pk)
+using namespace std;
+bool onSegment(pair<double, double> pi,
+        pair<double, double> pj,
+        pair<double, double> pk)
 {
-    if( (std::min(pi.first, pj.first) <=  pk.first && pk.first <= std::max(pi.first, pj.first))
-            && (std::min(pi.second, pj.second) <=  pk.second && pk.second <= std::max(pi.second, pj.second)))
+    if( (min(pi.first, pj.first) <=  pk.first && pk.first <= max(pi.first, pj.first))
+            && (min(pi.second, pj.second) <=  pk.second && pk.second <= max(pi.second, pj.second)))
     {
         return true;
     }
@@ -18,12 +19,12 @@ bool onSegment(std::pair<double, double> pi,
     }
 }
 
-double direction(std::pair<double, double> pi,
-        std::pair<double, double> pj,
-        std::pair<double, double> pk)
+double direction(pair<double, double> pi,
+        pair<double, double> pj,
+        pair<double, double> pk)
 {
-    std::pair<double, double> left;
-    std::pair<double, double> right;
+    pair<double, double> left;
+    pair<double, double> right;
     double retval = 0;
 
     left.first = pk.first - pi.first;
@@ -37,10 +38,10 @@ double direction(std::pair<double, double> pi,
 }
 
 
-bool segementsIntersect(std::pair<double, double> p1,
-        std::pair<double, double> p2,
-        std::pair<double, double> p3,
-        std::pair<double, double> p4)
+bool segementsIntersect(pair<double, double> p1,
+        pair<double, double> p2,
+        pair<double, double> p3,
+        pair<double, double> p4)
 {
     double d1 = direction(p3, p4, p1);
     double d2 = direction(p3, p4, p2);
@@ -50,15 +51,25 @@ bool segementsIntersect(std::pair<double, double> p1,
 
     if( ((d1 > 0 && d2 < 0) || (d1 < 0 && d2 > 0))
             && ((d3 > 0 && d4 < 0) || (d3 < 0 && d4 > 0)))
+    {
         retval = true;
+    }
     else if ( d1 == 0 && onSegment(p3, p4, p1))
+    {
         retval = true;
+    }
     else if ( d2 == 0 && onSegment(p3, p4, p2))
+    {
         retval = true;
+    }
     else if ( d3 == 0 && onSegment(p1, p2, p3))
+    {
         retval = true;
+    }
     else if ( d4 == 0 && onSegment(p1, p2, p4))
+    {
         retval = true;
+    }
 
     return retval;
 }
@@ -66,11 +77,12 @@ bool segementsIntersect(std::pair<double, double> p1,
 int main(void)
 {
     //TODO change this to cmd input
-    std::ifstream polygonFile("polygons.txt");
+    ifstream polygonFile("polygons.txt");
     int polygonSize = 0;
-    std::vector<std::pair<double, double>> points;
-    std::pair<double, double> tempPoint;
+    vector<pair<double, double>> points;
+    pair<double, double> tempPoint;
     int polyCount = 1;
+    bool hasCross = false;
 
     polygonFile >> polygonSize;
     do
@@ -81,16 +93,36 @@ int main(void)
             points.push_back(tempPoint);
         }
 
-        std::cout << "Polygon " << polyCount << endl;
+        cout << "Polygon " << polyCount << endl;
+
+        for(int i = 0; i < points.size() && !hasCross; i++)
+        {
+            pair<double,double> p2 = points.at((i+1)%points.size());
+            pair<double,double> p3 = points.at((i+2)%points.size());
+            pair<double,double> p4 = points.at((i+3)%points.size());
+
+            hasCross |= segementsIntersect(points.at(i), p2, p3, p4);
+
+        }
+
+        if(hasCross)
+        {
+            cout << "Not Simple" << endl;
+        }
+        else
+        {
+            cout << "Simple" << endl;
+        }
 
 
 
 
 
 
-
-
+        points.clear();
+        hasCross = false;
         polygonFile >> polygonSize;
+        polyCount++;
     }
     while(polygonSize > 2);
 
