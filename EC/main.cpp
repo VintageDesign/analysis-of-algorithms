@@ -6,7 +6,7 @@
 
 using namespace std;
 
-vector<vector<int>> readFile(void){
+vector<vector<int>> readFile(char * argv[]){
     ifstream            file;
     int                 size;
     int                 n;
@@ -14,7 +14,7 @@ vector<vector<int>> readFile(void){
     vector<int>         line;
     vector<vector<int>> out;
 
-    file.open("test.txt");
+    file.open(argv[1]);
 
 
     // Read in the whole file into a vector per line
@@ -37,8 +37,8 @@ vector<vector<int>> readFile(void){
     return out;
 }
 
-int main(void) {
-    vector<vector<int>> file = readFile();
+int main(int argc, char *argv[]) {
+    vector<vector<int>> file = readFile(argv);
     vector<int>         line;
     int                 minValPos;
     int                 val = 0;
