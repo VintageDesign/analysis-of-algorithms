@@ -6,27 +6,27 @@ using namespace std;
 
 vector<vector<int>> readFile(void){
     ifstream file;
-    string line;
     int size;
     int n;
     vector<int> line;
     vector<vector<int>> out;
+    int temp;
 
     file.open("test.txt");
     while(!file.eof()){
-        file << n;
-        line.push_back(size);
+        file >> n;
+        file >> size;
         line.push_back(n);
+        line.push_back(size);
 
         for(int i = 0; i < size; i++){
-            int temp;
-            file << temp;
+            file >> temp;
             line.push_back(temp);
         }
 
         n = 0;
         size = 0;
-        out.push_back(temp);
+        out.push_back(line);
         line.clear();
     }
 
@@ -38,24 +38,52 @@ int main(void) {
     vector<int> line;
     int val = 0;
 
-    for(i = 0; i < file.size(); i++)
+    for(int x = 0; x < 1; x++)
     {
-        line = file.at(i);
-        n = file.at(0);
-        line.erase(0);
+        line = file.at(x);
+        int n = line.at(0);
 
-        int array[n][line.size()] = {{0}};
+        int array[line.size()-2][n] = {{0}};
 
-        for(int i = 0; i < line.size(); i++)
+        for(int i = 0; i < line.size() - 2; i++)
         {
-            val = line.at(i)
-            for int j = 0; j < n; j++)
+            val = line.at(i+2);
+            for (int j = 1; j < n+1; j++)
             {
-                int dividend = (j + 1) / val;
-                int ret = (j + 1) % 1;
+                int dividend = j / val;
+                int rem = j % val;
 
-                if dividend
+                if (dividend == 0)
+                {
+                    array[i][j-1] = array[i-1][j-1];
+                }
+                else
+                {
+                    if(rem == 0)
+                    {
+                        array[i][j-1] = dividend;
+                    }
+                    else
+                    {
+                        array[i][j-1] = dividend + array[i][rem-1];
+                    }
+
+                    if(array[i][j-1] > array[i-1][j-1] && i != 0)
+                    {
+                        array[i][j-1] = array[i-1][j-1];
+                    }
+                }
             }
+        }
+
+        for(int i = 0; i < line.size()-2; i++)
+        {
+            for (int j = 0; j < n; j++)
+            {
+                cout << array[i][j] << " ";
+
+            }
+            cout << endl;
         }
 
 
