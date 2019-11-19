@@ -55,7 +55,11 @@ int main(int argc, char *argv[]) {
         cout << "Input: s = {";
 
 
-        int array[line.size()-2][n] = {{0}};
+        int **array = new int*[line.size()-2];
+        for( int index = 0; index < line.size()-2; index++)
+        {
+            array[index] = new int[n];
+        }
 
         for(int i = 0; i < line.size() - 2; i++)
         {
